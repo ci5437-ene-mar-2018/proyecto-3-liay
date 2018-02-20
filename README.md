@@ -12,6 +12,7 @@
 
 ### Proyectos
 * Proyecto 1: B&uacute;squeda heur&iacute;stica
+* Proyecto 2: Algoritmos de juego sobre variante de Othello
 
 ### Lista de clase:
 * 09-10066 Gabriel Austin
