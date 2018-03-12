@@ -18,7 +18,7 @@ Se entrega un directorio que contiene distintos casos de prueba.
 
 # Actividad 1
 
-Instalar el SAT solver llamado ```minisat´´´ y estudiar el formato de entrada y salida del mismo.
+Instalar el SAT solver llamado ```minisat``` y estudiar el formato de entrada y salida del mismo.
 
 # Actividad 2
 
