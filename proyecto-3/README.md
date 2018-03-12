@@ -7,10 +7,11 @@ El esquema del solucionador es el siguiente. Dado un nonograma, se tiene
 que construir una teor&iacute;a proposicional &Delta; tal que:
 * el nonograma tiene soluci&oacute;n si y s&oacute;lo si &Delta; es satisfacible,
 * cada la soluci&oacute;n del nonograma esta en correspondencia con los modelos de &Delta;.
+
 El solucionador consiste entonces de:
-* un programa que codifica un nonograma dado en una teor&iacute;a proposicional &Delta;,
-* llamar a un SAT solver con entrada &Delta;,
-* si el SAT solver consigue un modelo, llama un programa que decodifica el modelo en una soluci&oacute;n para el nonograma.
+1. un programa que codifica un nonograma dado en una teor&iacute;a proposicional &Delta;,
+2. llamar a un SAT solver con entrada &Delta;,
+3. si el SAT solver consigue un modelo, llama un programa que decodifica el modelo en una soluci&oacute;n para el nonograma.
 
 # Material entregado
 
