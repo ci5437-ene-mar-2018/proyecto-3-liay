@@ -23,7 +23,7 @@ Instalar el SAT solver llamado ```minisat``` y estudiar el formato de entrada y 
 
 # Actividad 2
 
-Estudiar los Nonogramas, y construir un codificador de juegos en teor&iacute;as proposicionals
+Estudiar los Nonogramas y el formato .non para describirlos. Construir un codificador de juegos en teor&iacute;as proposicionales,
 y un decodificador de modelos proposicionales en soluciones al nonograma.
 
 # Actividad 3
