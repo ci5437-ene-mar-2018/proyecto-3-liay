@@ -9,9 +9,9 @@ que construir una teor&iacute;a proposicional &Delta; tal que:
 * cada la soluci&oacute;n del nonograma esta en correspondencia con los modelos de &Delta;.
 
 El solucionador consiste entonces de:
-1. un programa que codifica un nonograma dado en una teor&iacute;a proposicional &Delta;,
+1. un programa que *codifica* un nonograma dado en una teor&iacute;a proposicional &Delta;,
 2. llamar a un SAT solver con entrada &Delta;,
-3. si el SAT solver consigue un modelo, llama un programa que decodifica el modelo en una soluci&oacute;n para el nonograma.
+3. si el SAT solver consigue un modelo, llama un programa que *decodifica* el modelo en una soluci&oacute;n para el nonograma.
 
 # Material entregado
 
