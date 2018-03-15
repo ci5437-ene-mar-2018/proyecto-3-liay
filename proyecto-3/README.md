@@ -7,10 +7,11 @@ El esquema del solucionador es el siguiente. Dado un nonograma, se tiene
 que construir una teor&iacute;a proposicional &Delta; tal que:
 * el nonograma tiene soluci&oacute;n si y s&oacute;lo si &Delta; es satisfacible,
 * cada la soluci&oacute;n del nonograma esta en correspondencia con los modelos de &Delta;.
+
 El solucionador consiste entonces de:
-* un programa que codifica un nonograma dado en una teor&iacute;a proposicional &Delta;,
-* llamar a un SAT solver con entrada &Delta;,
-* si el SAT solver consigue un modelo, llama un programa que decodifica el modelo en una soluci&oacute;n para el nonograma.
+1. un programa que *codifica* un nonograma dado en una teor&iacute;a proposicional &Delta;,
+2. llamar a un SAT solver con entrada &Delta;,
+3. si el SAT solver consigue un modelo, llama un programa que *decodifica* el modelo en una soluci&oacute;n para el nonograma.
 
 # Material entregado
 
@@ -18,11 +19,11 @@ Se entrega un directorio que contiene distintos casos de prueba.
 
 # Actividad 1
 
-Instalar el SAT solver llamado ```minisat´´´ y estudiar el formato de entrada y salida del mismo.
+Instalar el SAT solver llamado ```minisat``` y estudiar el formato de entrada y salida del mismo.
 
 # Actividad 2
 
-Estudiar los Nonogramas, y construir un codificador de juegos en teor&iacute;as proposicionals
+Estudiar los Nonogramas y el formato .non para describirlos. Construir un codificador de juegos en teor&iacute;as proposicionales,
 y un decodificador de modelos proposicionales en soluciones al nonograma.
 
 # Actividad 3
