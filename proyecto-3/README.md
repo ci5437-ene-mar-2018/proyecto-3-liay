@@ -6,7 +6,7 @@ El objetivo del proyecto es construir un solucionador de juegos *Nonogramas*
 El esquema del solucionador es el siguiente. Dado un nonograma, se tiene
 que construir una teor&iacute;a proposicional &Delta; tal que:
 * el nonograma tiene soluci&oacute;n si y s&oacute;lo si &Delta; es satisfacible,
-* cada la soluci&oacute;n del nonograma esta en correspondencia con los modelos de &Delta;.
+* cada la soluci&oacute;n del nonograma esta en correspondencia con los modelos de &Delta;, y vice versa.
 
 El solucionador consiste entonces de:
 1. un programa que *codifica* un nonograma dado en una teor&iacute;a proposicional &Delta;,
@@ -23,7 +23,7 @@ Instalar el SAT solver llamado ```minisat``` y estudiar el formato de entrada y 
 
 # Actividad 2
 
-Estudiar los Nonogramas y el formato .non para describirlos. Construir un codificador de juegos en teor&iacute;as proposicionales,
+Estudiar los nonogramas y el formato .non para describirlos. Construir un codificador de nonogramas en teor&iacute;as proposicionales,
 y un decodificador de modelos proposicionales en soluciones al nonograma.
 
 # Actividad 3
@@ -34,7 +34,7 @@ soluci&oacute;n calculada (si existe) en una soluci&oacute;n al nonograma.
 
 # Actividad 4
 
-Construir una imagen dada a partir de la soluci&oacute;n al nonograma, ya que toda
+Construir una imagen a partir de la soluci&oacute;n al nonograma, ya que toda
 soluci&oacute;n se corresponde con un bitmap de pixels blanco y negro.
 
 # Entregables
