@@ -23,6 +23,8 @@ def joinRules(ruleList1, ruleList2):
 
 	joinedRules = list(list(tupleRule) for tupleRule in joinedRules)
 
+	list((x for x in joinedRules))
+
 	return joinedRules
 
 

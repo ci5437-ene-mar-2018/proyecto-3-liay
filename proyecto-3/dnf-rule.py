@@ -1,3 +1,5 @@
+import sys
+
 def appendable(rule1, rule2):
 	for var1 in rule1:
 		for var2 in rule2:
@@ -65,7 +67,7 @@ def createRule(hints, variableList):
 	return joinedRules
 
 
-def rulesFromBoard(board, colHints, rowHints):
+def rulesFromBoard(board, rowHints, colHints):
 	totalRulesDNF = []
 	for i in range(len(board)):
 		totalRulesDNF.append(createRule(rowHints[i], board[i]))
@@ -129,17 +131,89 @@ def printToFile(cnfRules, numVariables, file):
 	f.close()
 
 
+def createBoard(rows, columns):
+
+	board = []
+
+	i = 1
+	for x in range(rows):
+		tmp = []
+		for y in range(columns):
+			tmp.append(i)
+			i = i + 1
+
+		board.append(tmp)
+
+	return board
+
+
+def readHints(fileD, stop = ""):
+	line = fileD.readline()
+	hints = []
+
+	if stop != "":
+		while not stop in line:
+			hint = [int(x) for x in line.split(',')]
+			hints.append(hint)
+			line = fileD.readline()
+
+	else:
+		while line:
+			hint = [int(x) for x in line.split(',')]
+			hints.append(hint)
+			line = fileD.readline()
+
+	return hints
+
+
+def readFromFile(file):
+	f = open(file, "r")
+
+	line = f.readline()
+
+	columns = int(line.split(' ')[-1])
+
+	line = f.readline()
+	rows = int(line.split(' ')[-1])
+
+	line = f.readline()
+
+	if "columns" in line:
+		colHints = readHints(f, "rows")
+		rowHints = readHints(f)
+
+	else:
+		rowHints = readHints(f, "columns")
+		colHints = readHints(f)
+
+
+	board = createBoard(rows, columns)
+
+	f.close()
+
+	return board, rowHints, colHints
+
 
 def main():
-	testDNF = rulesFromBoard([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]], [[4],[1,1],[1,1],[1,1]], [[3],[1,1],[3],[1,1]])
 
-	cnfRules, numVariables = dnfToCNF(testDNF, 16)
+	file = sys.argv[1]
 
-	print(cnfRules)
-	print("\n\n")
-	print(testDNF)
+	board, rowHints, colHints = readFromFile(file)
+	print("READ FILE")
+
+	lastBoardVar = len(board) * len(board[0])
+
+	testDNF = rulesFromBoard(board, rowHints, colHints)
+	print("GOT RULES IN DNF")
+
+	#testDNF = rulesFromBoard([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]],  [[3],[1,1],[3],[1,1]], [[4],[1,1],[1,1],[1,1]])
+
+	cnfRules, numVariables = dnfToCNF(testDNF, lastBoardVar)
+	print("GOT RULES IN CNF")
 
 	printToFile(cnfRules, numVariables, "test.sat")
+	print("FILE PRINTED. BYE!")
+
 
 
 
