@@ -1,4 +1,5 @@
 import sys
+import itertools
 
 def appendable(rule1, rule2):
 	for var1 in rule1:
@@ -9,38 +10,63 @@ def appendable(rule1, rule2):
 	return True
 
 
-def joinRules(ruleList1, ruleList2):
-	joinedRules = []
+def filterRules(ruleDic1, ruleDic2):
+	orderRules = {}
+	appendableRules = {}
 
-	for rule1 in ruleList1:
-		for rule2 in ruleList2:
-			if appendable(rule1, rule2):
-				joinedRules.append(rule1+rule2)
+	keys = []
+	for key1 in ruleDic1:
+		for key2 in ruleDic2:
 
-	return joinedRules
+			if not appendable(ruleDic1[key1], ruleDic2[key2]):
+				try:
+					orderRules[key1].append(-key2)
+				except:
+					orderRules[key1] = [-key2]
 
-
-def fillSlots(rule, variableList):
-	totalVariables = [-x for x in variableList]
-
-	for var1 in rule:
-		for var2 in totalVariables:
-			if abs(var1) == abs(var2):
-				totalVariables.remove(var2)
-				break
-
-	finalRule = rule + totalVariables
-
-	return finalRule
+			else:
+				appendableRules[key1] = True
+				appendableRules[key2] = True
 
 
-def createRule(hints, variableList):
+	# delete impossible rules
+	for key in list(ruleDic1):
+		if not appendableRules.get(key, False):
+			del ruleDic1[key]
+			orderRules.pop(key, None)
+
+			for key2 in orderRules:
+				if -key in orderRules[key2]:
+					orderRules[key2].remove(-key)
+
+	for key in list(ruleDic2):
+		if not appendableRules.get(key, False):
+			del ruleDic2[key]
+			orderRules.pop(key, None)
+
+			for key2 in orderRules:
+				if -key in orderRules[key2]:
+					orderRules[key2].remove(-key)			
+
+	# add order rules
+	for key in orderRules:
+		try:
+			ruleDic1[key] += orderRules[key]
+		except:
+			ruleDic2[key] += orderRules[key]
+
+	return [list(ruleDic1.keys()), list(ruleDic2.keys())]
+
+
+def createRule(hints, variableList, lastVar):
 
 	length = len(variableList)
 	rulesList = []
 
+	auxVar = lastVar + 1
+
 	for hint in hints:
-		hintRules = []
+		hintRules = {}
 		for num in range(length-hint+1):
 			tmpRule = []
 			for x in range(num, num+hint):
@@ -49,84 +75,109 @@ def createRule(hints, variableList):
 			if (num < length-hint):
 				tmpRule.append(-variableList[(num+hint)])
 
-			hintRules.append(tmpRule)
+			hintRules[auxVar] = tmpRule
+			auxVar += 1
 
 		rulesList.append(hintRules)
 
-	try:
-		joinedRules = rulesList[0]
-	except:
-		joinedRules = []
-
+	keys = []
 	for i in range(1, len(rulesList)):
-		joinedRules = joinRules(joinedRules, rulesList[i])
+		keys += filterRules(rulesList[i-1], rulesList[i])
 
-	for i in range(len(joinedRules)):
-		joinedRules[i] = fillSlots(joinedRules[i], variableList)
+	if len(keys) != 0:
+		# remove duplicates
+		cleanKeys = []
+		numAuxVariables = 0
+		for key in keys:
+			if not key in cleanKeys:
+				numAuxVariables += len(key)
+				cleanKeys.append(key)
 
-	return joinedRules
+		rulesList.append({-i: cleanKeys[i-1] for i in range(1, len(cleanKeys)+1)})
+	else:
+		try:
+			rulesList.append({-1: list(rulesList[0].keys())})
+			numAuxVariables = len(rulesList[0].keys())
+		except:
+			None
+
+	# Add necessary conditions
+	necessaryConditions = addNecessaryConditions(rulesList)
+	if len(necessaryConditions) > 0:
+		rulesList.append(addNecessaryConditions(rulesList))
+
+	return rulesList, numAuxVariables, auxVar-1
 
 
-def rulesFromBoard(board, rowHints, colHints):
-	totalRulesDNF = []
+def rulesFromBoard(board, rowHints, colHints, lastVar):
+	totalRules = []
+	realLastVar = lastVar
 	for i in range(len(board)):
-		totalRulesDNF.append(createRule(rowHints[i], board[i]))
+		tmpRules, tmpVariables, realLastVar = createRule(rowHints[i], board[i], realLastVar)
+		totalRules += tmpRules
 
 	boardColumns = [list(i) for i in zip(*board)]
 
 	for i in range(len(boardColumns)):
-		totalRulesDNF.append(createRule(colHints[i], boardColumns[i]))
+		tmpRules, tmpVariables, realLastVar = createRule(colHints[i], boardColumns[i], realLastVar)
+		totalRules += tmpRules
+
+	return totalRules, realLastVar
 
 
-	return totalRulesDNF
+def addNecessaryConditions(rulesList):
+	necessaryConditions = {}
+
+	for block in rulesList:
+		for rule in block:
+			if rule >= 0:
+				# Necessary Conditions
+				for var in block[rule]:
+					if var > 0:
+						try:
+							necessaryConditions[var].append(rule)
+						except:
+							necessaryConditions[var] = [rule]
 
 
-def dnfToCNF(dnfRules, lastVar):
-	length = dnfRules
-
-	auxVar = lastVar+1
-	cnfRules = []
-	for rules in dnfRules:
-		ruleList = []
-		step = auxVar
-		for rule in rules:
-			tmp = [auxVar]
-			for var in rule:
-				tmp.append(-var)
-				ruleList.append([-auxVar, var])
-
-			ruleList.append(tmp)
-			auxVar += 1
-
-		endRule = []
-		for i in range(step, auxVar):
-			endRule.append(i)
-
-		ruleList.append(endRule)
+	return necessaryConditions
 
 
-		cnfRules.append(ruleList)
+def addUnicityRules(rulesList, realLastVar):
+	counter = 0
 
-	# tmp = []
-	# for i in range(lastVar+1, auxVar):
-	# 	tmp.append(i)
+	for block in rulesList:
+		for rule in block:
+			if rule >= 0 and rule > realLastVar:
+				# Unicity Rules
+				for rule2 in block:
+					if rule != rule2 and rule2 > realLastVar:
+						block[rule].append(-rule2)
 
-	# cnfRules.append(tmp)
+				counter += len(block[rule])
 
-	cnfRules = [x for rule in cnfRules for x in rule]
+			else:
+				counter += 1
 
-	return cnfRules, auxVar-1
+	return counter
 
 
-def printToFile(cnfRules, numVariables, file):
+def printToFile(ruleList, numVariables, numClauses, realLastVar, file):
 
 	f = open(file, "w")
 
-	clauses = len(cnfRules)
-	f.write("p cnf "+str(numVariables)+" "+str(clauses)+"\n")
+	f.write("p cnf "+str(numVariables)+" "+str(numClauses)+"\n")
 
-	for rule in cnfRules:
-		f.write(" ".join([str(i) for i in rule])+" 0\n")
+	for block in ruleList:
+		for rule in block:
+			if rule >= 0 and rule > realLastVar:
+				for var in block[rule]:
+					f.write(str(-rule)+" "+str(var)+" 0\n")
+
+			elif rule > 0 and rule <= realLastVar:
+				f.write(str(-rule)+" "+" ".join([str(i) for i in block[rule]])+" 0\n")
+			else:
+				f.write(" ".join([str(i) for i in block[rule]])+" 0\n")
 
 	f.close()
 
@@ -203,18 +254,20 @@ def main():
 
 	lastBoardVar = len(board) * len(board[0])
 
-	testDNF = rulesFromBoard(board, rowHints, colHints)
-	print("GOT RULES IN DNF")
+	test, variableNumber = rulesFromBoard(board, rowHints, colHints, lastBoardVar)
+	print("GOT RULES")
 
-	#testDNF = rulesFromBoard([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]],  [[3],[1,1],[3],[1,1]], [[4],[1,1],[1,1],[1,1]])
+	clauseNumber = addUnicityRules(test, lastBoardVar)
+	print("ADDED UNICITY RULES")
 
-	cnfRules, numVariables = dnfToCNF(testDNF, lastBoardVar)
-	print("GOT RULES IN CNF")
-
-	printToFile(cnfRules, numVariables, "test.sat")
+	printToFile(test, variableNumber, clauseNumber, lastBoardVar, "test.sat")
 	print("FILE PRINTED. BYE!")
 
-
+	print(variableNumber)
+	print()
+	print(clauseNumber)
+	print()
+	print(test)
 
 
 if __name__ == '__main__':
