@@ -217,7 +217,12 @@ def readHints(fileD, stop = ""):
 
 
 def readFromFile(file):
-	f = open(file, "r")
+	try:
+		f = open(file, "r")
+	except IOError:
+		print("Cant open '"+file+"'.\n")
+		sys.exit(-1)
+
 
 	line = f.readline()
 
@@ -259,6 +264,8 @@ def encoder(file, saveFile):
 
 	printToFile(test, variableNumber, clauseNumber, lastBoardVar, saveFile)
 	print("FILE PRINTED. BYE!")
+
+	return board
 
 
 def satFilename(file):
