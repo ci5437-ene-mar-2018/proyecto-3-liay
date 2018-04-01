@@ -3,9 +3,9 @@ WARNING: for repeatability, setting FPU to use double precision
 |                                                                             |
 |  Number of variables:         20231                                         |
 |  Number of clauses:          708431                                         |
-|  Parse time:                   0.14 s                                       |
+|  Parse time:                   0.17 s                                       |
 |  Eliminated clauses:           0.04 Mb                                      |
-|  Simplification time:          0.32 s                                       |
+|  Simplification time:          0.42 s                                       |
 |                                                                             |
 ============================[ Search Statistics ]==============================
 | Conflicts |          ORIGINAL         |          LEARNT          | Progress |
@@ -30,13 +30,16 @@ WARNING: for repeatability, setting FPU to use double precision
 |    196845 |   12299   351599   729330 |   632539   195999     68 | 18.066 % |
 |    295371 |   12249   348327   722768 |   695793   293925     90 | 18.313 % |
 |    443160 |   12178   345652   717393 |   765373   441161    120 | 18.664 % |
+|    664843 |   12018   343619   713327 |   841910   662202    159 | 19.455 % |
+|    997368 |   11796   329844   685317 |   926101   220572    158 | 20.553 % |
+|   1496156 |   11618   320292   666169 |  1018711   718209    232 | 21.432 % |
 ===============================================================================
-restarts              : 1276
-conflicts             : 595254         (1986 /sec)
-decisions             : 4281883        (0.00 % random) (14286 /sec)
-propagations          : 264391931      (882142 /sec)
-conflict literals     : 87858774       (16.83 % deleted)
-Memory used           : 635.00 MB
-CPU time              : 299.716 s
+restarts              : 3069
+conflicts             : 1565142        (725 /sec)
+decisions             : 9358048        (0.00 % random) (4336 /sec)
+propagations          : 832741548      (385867 /sec)
+conflict literals     : 334117984      (20.70 % deleted)
+Memory used           : 1028.00 MB
+CPU time              : 2158.1 s
 
-INDETERMINATE
+SATISFIABLE
