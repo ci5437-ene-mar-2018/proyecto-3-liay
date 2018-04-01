@@ -262,7 +262,7 @@ def readFromFile(file):
 def encoder(file, saveFile):
 
 	board, rowHints, colHints = readFromFile(file)
-	print("READ FILE")
+	print("READ NON FILE")
 
 	lastBoardVar = len(board) * len(board[0])
 
@@ -273,7 +273,7 @@ def encoder(file, saveFile):
 	print("ADDED UNICITY RULES")
 
 	printToFile(test, variableNumber, clauseNumber, lastBoardVar, saveFile)
-	print("FILE PRINTED. BYE!")
+	print("SAT FILE PRINTED. BYE!")
 
 	return board
 
