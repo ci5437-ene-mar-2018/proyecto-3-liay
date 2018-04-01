@@ -66,18 +66,22 @@ def createRule(hints, variableList, lastVar):
 
 	for hint in hints:
 		hintRules = {}
-		for num in range(length-hint+1):
-			tmpRule = []
-			for x in range(num, num+hint):
-				tmpRule.append(variableList[x])
+		if hint > 0:
+			for num in range(length-hint+1):
+				tmpRule = []
+				for x in range(num, num+hint):
+					tmpRule.append(variableList[x])
 
-			if (num < length-hint):
-				tmpRule.append(-variableList[(num+hint)])
+				if (num < length-hint):
+					tmpRule.append(-variableList[(num+hint)])
 
-			hintRules[auxVar] = tmpRule
+				hintRules[auxVar] = tmpRule
+				auxVar += 1
+
+			rulesList.append(hintRules)
+		else:
+			hintRules[auxVar] = [-x for x in variableList]
 			auxVar += 1
-
-		rulesList.append(hintRules)
 
 	keys = []
 	for i in range(1, len(rulesList)):
@@ -86,17 +90,14 @@ def createRule(hints, variableList, lastVar):
 	if len(keys) != 0:
 		# remove duplicates
 		cleanKeys = []
-		numAuxVariables = 0
 		for key in keys:
 			if not key in cleanKeys:
-				numAuxVariables += len(key)
 				cleanKeys.append(key)
 
 		rulesList.append({-i: cleanKeys[i-1] for i in range(1, len(cleanKeys)+1)})
 	else:
 		try:
 			rulesList.append({-1: list(rulesList[0].keys())})
-			numAuxVariables = len(rulesList[0].keys())
 		except:
 			None
 
@@ -105,20 +106,21 @@ def createRule(hints, variableList, lastVar):
 	if len(necessaryConditions) > 0:
 		rulesList.append(addNecessaryConditions(rulesList))
 
-	return rulesList, numAuxVariables, auxVar-1
+	return rulesList, auxVar-1
 
 
 def rulesFromBoard(board, rowHints, colHints, lastVar):
 	totalRules = []
 	realLastVar = lastVar
 	for i in range(len(board)):
-		tmpRules, tmpVariables, realLastVar = createRule(rowHints[i], board[i], realLastVar)
+		tmpRules, realLastVar = createRule(rowHints[i], board[i], realLastVar)
 		totalRules += tmpRules
+
 
 	boardColumns = [list(i) for i in zip(*board)]
 
 	for i in range(len(boardColumns)):
-		tmpRules, tmpVariables, realLastVar = createRule(colHints[i], boardColumns[i], realLastVar)
+		tmpRules, realLastVar = createRule(colHints[i], boardColumns[i], realLastVar)
 		totalRules += tmpRules
 
 	return totalRules, realLastVar
@@ -226,10 +228,18 @@ def readFromFile(file):
 
 	line = f.readline()
 
-	columns = int(line.split(' ')[-1])
+	if "width" in line:
+		columns = int(line.split(' ')[-1])
 
-	line = f.readline()
-	rows = int(line.split(' ')[-1])
+		line = f.readline()
+		rows = int(line.split(' ')[-1])
+
+	elif "height" in line:
+		rows = int(line.split(' ')[-1])
+
+		line = f.readline()
+		columns = int(line.split(' ')[-1])
+
 
 	line = f.readline()
 

@@ -1,4 +1,4 @@
-import generator, translator, getopt, sys, os
+import generator, translator, getopt, sys, os, subprocess
 
 def resultFilename(file):
 	saveFile = file.split("/")[-1]
@@ -23,17 +23,17 @@ def statFilename(file):
 def main():
 	# Handle options and arguments
 	try:
-		opts, args = getopt.gnu_getopt(sys.argv[1:], "mi", ["minisat", "image"])
+		opts, args = getopt.gnu_getopt(sys.argv[1:], "mih", ["minisat", "image", "help"])
 	
 	except:
-		print("Usage: .non-file [-i, --image |-m, --minisat]")
+		print("Usage: .non-file [-i, --image |-m, --minisat |-h, --help]")
 		sys.exit(2)
 
 	try:
 		nonFile = args[0]
 
 	except:
-		print("Usage: .non-file [-i, --image |-m, --minisat]")
+		print("Usage: .non-file [-i, --image |-m, --minisat |-h, --help]")
 		sys.exit(2)
 
 	image = False
@@ -47,8 +47,17 @@ def main():
 		elif o in ("-m", "--minisat"):
 			minisat = True
 
+		elif o in ("-h", "--help"):
+			print("solveNonogram.py\n\n\
+Usage: .non-file [-i, --image |-m, --minisat |-h, --help]\n\n\
+Options:\n\t-i, --image: Creates image based on results from minisat solver on the .non file\
+(run option -m before in order to have results).\n\t\
+-m, --minisat: Runs minisat solver on the .non file.\n\n\
+Argument: .non file with the nonogram specification.")
+			sys.exit(1)
+
 		else:
-			print("Usage: .non-file [-i, --image |-m, --minisat]")
+			print("Usage: .non-file [-i, --image |-m, --minisat |-h, --help]")
 			sys.exit(3)
 
 
@@ -72,8 +81,21 @@ def main():
 
 	# If minisat option enabled, runs minisat with parameters satFile, resultFile >> statFile
 	if minisat:
-		# LLAMADA A MINISAT CON PARAMETROS: SATFILE, RESULTFILE >> STATFILE
-		None
+		# Run minisat subprocess
+		args = ("minisat", satFile, resultFile)
+		
+		popen = subprocess.Popen(args, stdout=subprocess.PIPE)
+		popen.wait()
+		output = popen.stdout.read()
+
+		# Write statistics files
+		stat = open(statFile, "w")
+		stat.write(output.decode())
+		stat.close()
+
+		# Show statistics in stdout
+		print(output.decode())
+
 
 	# If image option enabled, runs result decoder to obtain solution, and saves solution image
 	if image:
