@@ -1,5 +1,4 @@
-import sys
-import itertools
+import sys, os
 
 def appendable(rule1, rule2):
 	for var1 in rule1:
@@ -245,9 +244,7 @@ def readFromFile(file):
 	return board, rowHints, colHints
 
 
-def main():
-
-	file = sys.argv[1]
+def encoder(file, saveFile):
 
 	board, rowHints, colHints = readFromFile(file)
 	print("READ FILE")
@@ -260,14 +257,32 @@ def main():
 	clauseNumber = addUnicityRules(test, lastBoardVar)
 	print("ADDED UNICITY RULES")
 
-	printToFile(test, variableNumber, clauseNumber, lastBoardVar, "test.sat")
+	printToFile(test, variableNumber, clauseNumber, lastBoardVar, saveFile)
 	print("FILE PRINTED. BYE!")
 
-	print(variableNumber)
-	print()
-	print(clauseNumber)
-	print()
-	print(test)
+
+def satFilename(file):
+
+	saveFile = file.split("/")[-1]
+
+	saveFile = saveFile.split(".")[0] + ".sat"
+
+	saveFile = os.getcwd() + "/satFiles/" + saveFile
+
+	return saveFile
+
+
+def main():
+
+	file = sys.argv[1]
+
+	encoder(file, satFilename(file))
+
+	# print(variableNumber)
+	# print()
+	# print(clauseNumber)
+	# print()
+	# print(test)
 
 
 if __name__ == '__main__':
