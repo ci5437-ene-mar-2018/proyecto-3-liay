@@ -1,3 +1,6 @@
+#!/usr/local/bin/python3
+
+
 import generator, translator, getopt, sys, os, subprocess
 
 def resultFilename(file):
