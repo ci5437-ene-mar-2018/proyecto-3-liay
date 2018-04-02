@@ -37,7 +37,7 @@
 
 python3 solveNonogram.py archivo_non [-i, --image] [-m, --minisat] [-h, --help]
 
-###### Requerimientos: 
+##### Requerimientos: 
 
 * Python 3.x
 * minisat 2.2 (el comando minisat debe ser global)
@@ -52,7 +52,7 @@ python3 solveNonogram.py archivo_non [-i, --image] [-m, --minisat] [-h, --help]
 * La codificación de las imágenes es la esperada. La mayoría se puede apreciar claramente. 
 
 
-###### Nota: 
+##### Nota: 
 
 * Las reglas están definidas como claves en un diccionario que representa el bloque.
 
