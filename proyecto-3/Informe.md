@@ -59,3 +59,5 @@ python3 solveNonogram.py archivo_non [-i, --image] [-m, --minisat] [-h, --help]
 * Los archivos .sat no se incluyen en el repositorio debido a que son muy pesados. 
 
 * Para generar la imagen correspondiente al resultado de un nonograma sin utilizar la opción -m, es necesario haber utilizado dicha opción anteriormente sobre el mismo archivo para obtener el resultado.
+
+* No se pudieron incluir los resultados y las estadísticas de los casos de prueba knotty, meow, faase y webpbn-22336, debido a los largos tiempo de corrida del minisat (todavía no han terminado). 
