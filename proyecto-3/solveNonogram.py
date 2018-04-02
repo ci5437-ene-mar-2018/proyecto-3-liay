@@ -1,5 +1,16 @@
-#!/usr/local/bin/python3
+#!/usr/bin/env python3
 
+# solveNonogram.py
+# Universidad Simon Bolivar
+# CI5437: Inteligencia Artificial I
+
+# Autores: 
+#   - Yarima Luciani 13-10770
+#   - Lautaro Villalon 12-10427
+
+# Equipo: LIAY
+# Prof. Blai Bonet
+# Ene-Mar 2018
 
 import generator, translator, getopt, sys, os, subprocess
 
@@ -29,14 +40,14 @@ def main():
 		opts, args = getopt.gnu_getopt(sys.argv[1:], "mih", ["minisat", "image", "help"])
 	
 	except:
-		print("Usage: .non-file [-i, --image |-m, --minisat |-h, --help]")
+		print("Usage: .non-file [-i, --image] [-m, --minisat] [-h, --help]")
 		sys.exit(2)
 
 	try:
 		nonFile = args[0]
 
 	except:
-		print("Usage: .non-file [-i, --image |-m, --minisat |-h, --help]")
+		print("Usage: .non-file [-i, --image] [-m, --minisat] [-h, --help]")
 		sys.exit(2)
 
 	image = False
@@ -52,7 +63,7 @@ def main():
 
 		elif o in ("-h", "--help"):
 			print("solveNonogram.py\n\n\
-Usage: .non-file [-i, --image |-m, --minisat |-h, --help]\n\n\
+Usage: .non-file [-i, --image] [-m, --minisat] [-h, --help]\n\n\
 Options:\n\t-i, --image: Creates image based on results from minisat solver on the .non file\
 (run option -m before in order to have results).\n\t\
 -m, --minisat: Runs minisat solver on the .non file.\n\n\
@@ -60,7 +71,7 @@ Argument: .non file with the nonogram specification.")
 			sys.exit(1)
 
 		else:
-			print("Usage: .non-file [-i, --image |-m, --minisat |-h, --help]")
+			print("Usage: .non-file [-i, --image] [-m, --minisat] [-h, --help]")
 			sys.exit(3)
 
 
