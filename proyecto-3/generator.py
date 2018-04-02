@@ -57,6 +57,24 @@ def filterRules(ruleDic1, ruleDic2):
 	return [list(ruleDic1.keys()), list(ruleDic2.keys())]
 
 
+def addNecessaryConditions(rulesList):
+	necessaryConditions = {}
+
+	for block in rulesList:
+		for rule in block:
+			if rule >= 0:
+				# Necessary Conditions
+				for var in block[rule]:
+					if var > 0:
+						try:
+							necessaryConditions[var].append(rule)
+						except:
+							necessaryConditions[var] = [rule]
+
+
+	return necessaryConditions
+
+
 def createRule(hints, variableList, lastVar):
 
 	length = len(variableList)
@@ -124,63 +142,6 @@ def rulesFromBoard(board, rowHints, colHints, lastVar):
 		totalRules += tmpRules
 
 	return totalRules, realLastVar
-
-
-def addNecessaryConditions(rulesList):
-	necessaryConditions = {}
-
-	for block in rulesList:
-		for rule in block:
-			if rule >= 0:
-				# Necessary Conditions
-				for var in block[rule]:
-					if var > 0:
-						try:
-							necessaryConditions[var].append(rule)
-						except:
-							necessaryConditions[var] = [rule]
-
-
-	return necessaryConditions
-
-
-def addUnicityRules(rulesList, realLastVar):
-	counter = 0
-
-	for block in rulesList:
-		for rule in block:
-			if rule >= 0 and rule > realLastVar:
-				# Unicity Rules
-				for rule2 in block:
-					if rule != rule2 and rule2 > realLastVar:
-						block[rule].append(-rule2)
-
-				counter += len(block[rule])
-
-			else:
-				counter += 1
-
-	return counter
-
-
-def printToFile(ruleList, numVariables, numClauses, realLastVar, file):
-
-	f = open(file, "w")
-
-	f.write("p cnf "+str(numVariables)+" "+str(numClauses)+"\n")
-
-	for block in ruleList:
-		for rule in block:
-			if rule >= 0 and rule > realLastVar:
-				for var in block[rule]:
-					f.write(str(-rule)+" "+str(var)+" 0\n")
-
-			elif rule > 0 and rule <= realLastVar:
-				f.write(str(-rule)+" "+" ".join([str(i) for i in block[rule]])+" 0\n")
-			else:
-				f.write(" ".join([str(i) for i in block[rule]])+" 0\n")
-
-	f.close()
 
 
 def createBoard(rows, columns):
@@ -257,6 +218,46 @@ def readFromFile(file):
 	f.close()
 
 	return board, rowHints, colHints
+
+
+def addUnicityRules(rulesList, realLastVar):
+	counter = 0
+
+	for block in rulesList:
+		for rule in block:
+			if rule >= 0 and rule > realLastVar:
+				# Unicity Rules
+				for rule2 in block:
+					if rule != rule2 and rule2 > realLastVar:
+						block[rule].append(-rule2)
+
+				counter += len(block[rule])
+
+			else:
+			
+				counter += 1
+
+	return counter
+
+
+def printToFile(ruleList, numVariables, numClauses, realLastVar, file):
+
+	f = open(file, "w")
+
+	f.write("p cnf "+str(numVariables)+" "+str(numClauses)+"\n")
+
+	for block in ruleList:
+		for rule in block:
+			if rule >= 0 and rule > realLastVar:
+				for var in block[rule]:
+					f.write(str(-rule)+" "+str(var)+" 0\n")
+
+			elif rule > 0 and rule <= realLastVar:
+				f.write(str(-rule)+" "+" ".join([str(i) for i in block[rule]])+" 0\n")
+			else:
+				f.write(" ".join([str(i) for i in block[rule]])+" 0\n")
+
+	f.close()
 
 
 def encoder(file, saveFile):
