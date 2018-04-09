@@ -37,7 +37,7 @@
 
 python3 solveNonogram.py archivo_non [-i, --image] [-m, --minisat] [-h, --help]
 
-##### Requerimientos: 
+#### Requerimientos: 
 
 * Python 3.x
 * minisat 2.2 (el comando minisat debe ser global)

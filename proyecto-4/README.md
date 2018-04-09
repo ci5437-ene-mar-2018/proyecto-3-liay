@@ -26,7 +26,7 @@
 
 python3 solveTents.py archivo_dzn [-h, --help]
 
-##### Requerimientos: 
+#### Requerimientos: 
 
 * Python 3.x
 * MiniZinc (el comando minizinc debe ser global)
