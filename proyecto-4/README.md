@@ -16,7 +16,8 @@
 * El módulo tentSolver.mzn, escrito en MiniZinc, contiene el modelado del juego, la llamada al solucionador de MiniZinc y las restricciones del juego, las cuales son:
 
   * Pistas: Para cada pista, de una columna o fila, debe haber esa cantidad exacta de Carpas en su respectiva columna o fila.
-  * Relación con Árboles: Para cada Árbol, debe haber una carpa perpendicular y adyacente a él.
+  * Relación con Árboles: Para cada Árbol, debe haber una Carpa perpendicular y adyacente a él.
+  * Relación con Carpas: Para cada Carpa, debe haber un Árbol perpendicular y adyacente a él.
   * Carpas sobre Árboles: No debe haber una Carpa sobre un Árbol.
   * Carpas sin Vecinos: Para cada Carpa, no deben haber más Carpas en sus alrededores. 
 
@@ -36,7 +37,9 @@ python3 solveTents.py archivo_dzn [-h, --help]
 
 * MiniZinc permite la especificación de un problema de satisfacibilidad a mayor nivel que MiniSat, permitiendo el uso de variables, arreglos y otras estructuras para modelar el problema; siendo así, flexible y potente.
 
-* Todos los casos de prueba, hasta ahora, son satisfacibles y funciona la solución.
+* Todos los casos de prueba, hasta ahora, son satisfacibles.
+
+* Todos los casos de prueba, hasta ahora, se solucionan correctamente y en menos de un segundo.
 
 
 ##### Nota: 
@@ -44,3 +47,5 @@ python3 solveTents.py archivo_dzn [-h, --help]
 * MiniZinc no se incluye en el repositorio debido a que es muy pesado. 
 
 * El tablero resultante es una matriz con los siguientes números: 1=Carpa, 2=Árbol, 0=Vacío.
+
+* Los casos de prueba fueron tomados y los resultados comparados con el juego de Simon Tatham's Portable Puzzle Collection: https://www.chiark.greenend.org.uk/~sgtatham/puzzles/js/tents.html

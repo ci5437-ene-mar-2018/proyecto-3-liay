@@ -76,6 +76,41 @@
 	    | i in rowRange, j in colRange where trees[i, j] == 2]);
 
 
+	% There must be one tree perpendicular to every tent
+	constraint forall([
+
+		% corners
+	    if i == 1 /\ j == 1 then
+	    	trees[i+1, j] + trees[i, j+1] > 0
+
+	    elseif i == 1 /\ j == cols then
+	    	trees[i+1, j] + trees[i, j-1] > 0
+
+	    elseif i == rows /\ j == 1 then 
+	    	trees[i-1, j] + trees[i, j+1] > 0
+
+	    elseif i == rows /\ j == cols then 
+	    	trees[i-1, j] + trees[i, j-1] > 0
+	    
+	    % sides
+	    elseif i == 1 then 
+	    	trees[i+1, j] + trees[i, j-1] + trees[i, j+1] > 0
+
+	    elseif i == rows then 
+	    	trees[i-1, j] + trees[i, j-1] + trees[i, j+1] > 0
+
+	    elseif j == 1 then 
+	    	trees[i, j+1] + trees[i-1, j] + trees[i+1, j] > 0
+
+	    elseif j == cols then 
+	    	trees[i, j-1] + trees[i-1, j] + trees[i+1, j] > 0
+	    
+	    % inside
+	    else trees[i - 1, j] + trees[i + 1, j] + trees[i, j - 1] + trees[i, j + 1] > 0 endif
+
+	    | i in rowRange, j in colRange where board[i, j] == 1]);
+
+
 	% There can't be a tent over a tree
 	constraint forall([
 
